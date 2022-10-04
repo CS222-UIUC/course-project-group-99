@@ -1,4 +1,5 @@
 import requests
+#import pandas as pd
 
 personal_use_script = 'cvubelfv0g5PXYiRhaI7Cg'
 secret_token = 'Ie9ukcv-IrwwqAal35AKCXVQvHQDcg'
@@ -36,10 +37,12 @@ headers = {**headers, **{'Authorization': f"bearer {TOKEN}"}}
 # while the token is valid (~2 hours) we just add headers=headers to our requests
 requests.get('https://oauth.reddit.com/api/v1/me', headers=headers)
 
+# this is the entire map / dictionary of requests we get from the hot tab of UIUC reddit
 res = requests.get("https://oauth.reddit.com/r/UIUC/hot",
-                   headers=headers)
+                   headers=headers) # new, top
 
-# print(res.json())  # let's see what we get
+# printing out the map
+print(res.json())
 
 num = 1
 for post in res.json()['data']['children']:
@@ -48,4 +51,39 @@ for post in res.json()['data']['children']:
         print(to_pr)
         num += 1
 
-print ("hello")
+print("-------------------------------------------------\n")
+
+def get_num_reddit_titles():
+        num = 1
+        for post in res.json()['data']['children']:
+                stuff = post['data']['title']
+                to_pr = f'{num}: {stuff} \n'
+                print(to_pr)
+                num += 1
+        return num
+
+
+
+# df = pd.DataFrame()
+
+# for post in res.json()['data']['children']:
+#   # Creating a DataFrame
+#   df = df.append({
+#         'subreddit': post['data']['subreddit'],
+#         'title': post['data']['title'],
+#         'selftext': post['data']['selftext'],
+#         'upvote_ratio': post['data']['upvote_ratio'],
+#         'ups': post['data']['ups'],
+#         'downs': post['data']['downs'],
+#         'score': post['data']['score']
+#     }, ignore_index=True)
+
+# df.head()
+
+
+# Create a csv file
+# Create script to run code every 2 hours
+# every time the script runs, retireve the 27 posts
+# update / add those 27 posts to the CSV
+# separate the chunks of updated posts by a line
+# add the date and time the code is ran and uploaded to the csv file
