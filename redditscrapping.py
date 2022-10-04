@@ -64,21 +64,21 @@ def get_num_reddit_titles():
 
 
 
-# df = pd.DataFrame()
+df = pd.DataFrame()
 
-# for post in res.json()['data']['children']:
-#   # Creating a DataFrame
-#   df = df.append({
-#         'subreddit': post['data']['subreddit'],
-#         'title': post['data']['title'],
-#         'selftext': post['data']['selftext'],
-#         'upvote_ratio': post['data']['upvote_ratio'],
-#         'ups': post['data']['ups'],
-#         'downs': post['data']['downs'],
-#         'score': post['data']['score']
-#     }, ignore_index=True)
+for post in res.json()['data']['children']:
+  # Creating a DataFrame
+  df = df.append({
+        'subreddit': post['data']['subreddit'],
+        'title': post['data']['title'],
+        'selftext': post['data']['selftext'],
+        'upvote_ratio': post['data']['upvote_ratio'],
+        'ups': post['data']['ups'],
+        'downs': post['data']['downs'],
+        'score': post['data']['score']
+    }, ignore_index=True)
 
-# df.head()
+df.head()
 
 
 # Create a csv file
