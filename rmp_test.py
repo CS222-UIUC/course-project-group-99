@@ -1,5 +1,5 @@
 import pytest
-import rmp_
+import rmp
 
 def test_blank_input():
     credentials = rmp.get_prof_credentials("Daniel Berwik Evans", "University of Illinois at Urbana-Champaign")
