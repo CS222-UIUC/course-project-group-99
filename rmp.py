@@ -11,10 +11,8 @@ def get_prof_credentials(professor_name, uni):
         #corresponding uni name and run rmp function on the given uni name
     else:
         return {"Uni": professor.school.name, "Name": professor.name, "Dept": professor.department, "Difficulty":professor.difficulty,
-                "Rating":float(professor.rating), "Num_Rating": float(professor.num_ratings), "Take_Again": int(professor.would_take_again)
+                "Rating":professor.rating, "Num_Rating": professor.num_ratings, "Take_Again": professor.would_take_again
                }
 
-
 creds = get_prof_credentials("Hongye Liu", "University of Illinois at Urbana-Champaign")
-
-print(creds)
+print(creds["Name"])
