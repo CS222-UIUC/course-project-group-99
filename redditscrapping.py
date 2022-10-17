@@ -1,5 +1,6 @@
 import requests
-#import pandas as pd
+import pandas as pd
+import schedule
 
 personal_use_script = 'cvubelfv0g5PXYiRhaI7Cg'
 secret_token = 'Ie9ukcv-IrwwqAal35AKCXVQvHQDcg'
@@ -53,6 +54,7 @@ for post in res.json()['data']['children']:
 
 print("-------------------------------------------------\n")
 
+# for testing only
 def get_num_reddit_titles():
         num = 1
         for post in res.json()['data']['children']:
