@@ -1,6 +1,7 @@
 import requests
 import pandas as pd
 import schedule
+import csv
 
 personal_use_script = 'cvubelfv0g5PXYiRhaI7Cg'
 secret_token = 'Ie9ukcv-IrwwqAal35AKCXVQvHQDcg'
@@ -43,7 +44,7 @@ res = requests.get("https://oauth.reddit.com/r/UIUC/hot",
                    headers=headers) # new, top
 
 # printing out the map
-print(res.json())
+# print(res.json()['data']['children'])
 
 num = 1
 for post in res.json()['data']['children']:
