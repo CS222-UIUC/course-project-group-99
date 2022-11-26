@@ -1,81 +1,238 @@
 
-<head>
-<link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}">
+   <!-- <link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}"> -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+   <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" ></script>  
+   <style>
+      .ui-helper-hidden-accessible{
+          display:none;
+      }
+
+      .ui-autocomplete {
+        list-style: none;
+            max-height: 150px;
+            overflow-y: auto;
+            /* prevent horizontal scrollbar */
+            overflow-x: hidden;
+            /* add padding to account for vertical scrollbar */
+            padding-right: 20px;
+        }      
+
+        ul{
+  list-style:none;
+  max-height:200x;
+  margin:0;
+  overflow:auto;
+  padding:0;
+  text-indent:10px;
+}
+
+
+
+   </style>
+   <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+   
+  
+<body>
+
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h3>Select season</h3>
+        <div class="form-group">
+          <form id="season" name="course_form">
+          <input class="form-check-input" type="radio" name="radio_btn" id="radio1" value="Spring">
+          <label class="form-check-label" for="radio1">Spring</label>
+          <br>
+          <input class="form-check-input" type="radio" name="radio_btn" id="radio2" value="Summer">
+          <label class="form-check-label" for="radio2">Summer</label>
+          <br>
+          <input class="form-check-input" type="radio" name="radio_btn" id="radio3" value="Fall">
+          <label class="form-check-label" for="radio3">Fall</label>
+          <br>
+          <input class="form-check-input" type="radio" name="radio_btn" id="radio4" value="Winter" checked>
+          <label class="form-check-label" for="radio4">Winter</label>
+        </form>
+        </div>
+      </div>  
+      <div class="col" right-padding="30px">
+        <h3>Select Year</h3>
+        <div class="form-group">
+          <form id="year_form" name="course_form"> 
+          <select class="form-control" id="year"  onfocus='this.size=3;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+          </select>
+        </form>
+        </div>
+      </div>
+      <div class="col">
+        <h3 class="course-heading">Currently Added:</h3>
+        <ul class="list-group" id = "myUL" style="list-style:none">
+        </ul>
+      </div><div class="col"></div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+            <h2>Add classes</h2>
+            <div class="input-group">
+              <input type="text" class="form-control" id="myInput" >
+              <div class="input-group-append">
+                <span onclick="newElement()" class="btn btn-dark">Add</span>
+              </div>
+            </div>
+      </div>
+      
+      <div class="col">  
+        
+      </div>
+    </div>
+    <div class="row"> <div class="col"> <br> <br> <br><br><br><br><br><br><br><br>
+      <button type="button" class="btn btn-dark btn-lg" id="submit-btn" >Generate Recommendation</button>
+      
+    </div></div>
+
+  </div>
+</body>
+
+
+
+
 <script>
+  var dropdown = document.getElementById("year")
+      var curr_year = new Date().getFullYear()-1;
+      var earliest_year = curr_year-10;
+      while (curr_year >= earliest_year) {
+          let date = document.createElement("option");
+          date.innerHTML = curr_year;
+          dropdown.appendChild(date);
+          curr_year -= 1;
+      }
 
-    // Create a "close" button and append it to each list item
-var myNodelist = document.getElementsByTagName("LI");
-var i;
-for (i = 0; i < myNodelist.length; i++) {
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  myNodelist[i].appendChild(span);
-}
-
-// Click on a close button to hide the current list item
-var close = document.getElementsByClassName("close");
-var i;
-for (i = 0; i < close.length; i++) {
-  close[i].onclick = function() {
-    var div = this.parentElement;
-    div.style.display = "none";
-  }
-}
-
-// Add a "checked" symbol when clicking on a list item
-var list = document.querySelector('ul');
-list.addEventListener('click', function(ev) {
-  if (ev.target.tagName === 'LI') {
-    ev.target.classList.toggle('checked');
-  }
-}, false);
-
-// Create a new list item when clicking on the "Add" button
-function newElement() {
+      $(".dropdown-menu a").click(function(){
+  $(this).parents(".dropdown").find('.btn').html($(this).text());
+  $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+});
+ </script>
+ <script>
+      
+  // Click on a close button to hide the current list item
+   // Create a new list item when clicking on the "Add" button
+  function newElement() {
   var li = document.createElement("li");
   var inputValue = document.getElementById("myInput").value;
   var t = document.createTextNode(inputValue);
   li.appendChild(t);
+  var checked = document.querySelector('input[name = "radio_btn"]:checked');
+  var same = false;
+  var ul = document.getElementById("myUL");
+  var items= ul.getElementsByTagName("li");
+  for(let i = 0; i < items.length;i++) {
+    if (items[i].innerText == li.innerText) {same = true;break;}
+  }
   if (inputValue === '') {
-    alert("You must write something!");
-  } else {
-    document.getElementById("myUL").appendChild(li);
+  alert("The input field is empty");
+  } else if (checked == null) {
+    alert("select a season")
+  } else if (same) {
+    alert("You have already added this course");
+  }
+  else {
+  document.getElementById("myUL").appendChild(li);
   }
   document.getElementById("myInput").value = "";
-
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
-
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function() {
-      var div = this.parentElement;
-      div.style.display = "none";
-    }
-  }
-}
-</script>
-<body>
-
-
-
-
-
-
-<div id="myDIV" class="header">
-    <h2>Add classes</h2>
-    <input type="text" id="myInput" placeholder="Title...">
-    <span onclick="newElement()" class="addBtn">Add</span>
-</div>
   
+  var span = document.createElement("SPAN");
+  var icon = document.createElement('i');
+  icon.className = "fas fa-trash";
+  span.className = "close";
+  span.appendChild(icon);
+  li.appendChild(span);
+  var close = document.getElementsByClassName("close");
+  var i;
+  for (i = 0; i < close.length; i++) {
+  close[i].onclick = function() {
+  var div = this.parentElement;
+  var parent = div.parentNode;
+  parent.removeChild(div);
+  }
+  }
+  }     
+</script>
 
-<h3 class="course-heading">Currently Added:</h3>
 
-<ul id="myUL">
-</ul>
+<script>
+  let value_season = "Winter";
+  let value_year = "2021";
+  let term = value_year + "-" +value_season.toLowerCase().slice(0,2); ;
+  let arr;
+  let filtered;
+  var availableTags=[];
+  function isChut(value) {
+    return value.year_term === term;
+  }
+  fetch("static/courses.json")
+    .then((response) => response.json())
+    .then(data => {
+      arr = Object.values(data);
+      filtered = arr.filter(isChut);
+      for(let i = 0; i < filtered.length;i++) {
+        availableTags[i] = filtered[i].subject + " " + filtered[i].number + "-" + filtered[i].instructor;
+      }
+      $( "#myInput" ).autocomplete({
+      source: availableTags 
+      });
+    });
 
-</body>
+  // console.log(term);
+  // filtered = arr.filter(isChut);
+  // console.log(filtered);
+
+    
+  $(document).ready(function () {
+        $("input[name$='radio_btn']").change(function () {
+            value_season = $(this).val();
+            term = value_year + "-" +value_season.toLowerCase().slice(0,2);
+            document.getElementById("myUL").innerHTML = "";
+          //  console.log(term);
+            filtered = arr.filter(isChut);
+            for(let i = 0; i < filtered.length;i++) {
+              availableTags[i] = filtered[i].subject + " " + filtered[i].number + "-" + filtered[i].instructor;
+            }
+            $( "#myInput" ).autocomplete({
+            source: availableTags 
+            });
+        });
+            $('#year').change(function(){ 
+            value_year = $(this).val();
+            term = value_year + "-" +value_season.toLowerCase().slice(0,2);
+            document.getElementById("myUL").innerHTML = "";
+          //  console.log(term);
+            filtered = arr.filter(isChut);
+            for(let i = 0; i < filtered.length;i++) {
+              availableTags[i] = filtered[i].subject + " " + filtered[i].number + "-" + filtered[i].instructor;
+            }
+            $( "#myInput" ).autocomplete({
+            source: availableTags 
+            });
+        });
+  });
+   
+</script>
+<script>
+$(document).ready(function() {
+  $("#submit-btn").click(function(){
+    var selected_classes = document.getElementById("myUL").getElementsByTagName("li");
+    if(selected_classes.length == 0) {
+      alert("You have not selected any classes")
+    } else {
+      var confirmed = confirm("Are you sure?")
+      if(confirmed) {
+        console.log("confirmed randimal");
+      } 
+    }
+  });
+
+});
+</script>
