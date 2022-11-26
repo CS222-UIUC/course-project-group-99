@@ -1,18 +1,57 @@
-import ratemyprofessor
+
+import requests
+import re
+import json
+import base64
+import os
+from bs4 import BeautifulSoup
 
 
-def get_prof_credentials(professor_name, uni):
-    professor = ratemyprofessor.get_professor_by_school_and_name(
-    ratemyprofessor.get_school_by_name(uni), professor_name)
-    professor_credentials = {}
-    if professor is None:
-        return professor_credentials
-        ##if the professor is None, alternatively, we could try looking up their name in a database of universities, get the
-        #corresponding uni name and run rmp function on the given uni name
-    else:
-        return {"Uni": professor.school.name, "Name": professor.name, "Dept": professor.department, "Difficulty":professor.difficulty,
-                "Rating":professor.rating, "Num_Rating": professor.num_ratings, "Take_Again": professor.would_take_again
-               }
 
-creds = get_prof_credentials("Hongye Liu", "University of Illinois at Urbana-Champaign")
-print(creds["Name"])
+# uiuc id  = [1112]
+
+# def get_tid(name: str):
+
+#     id = "1112"
+#     url = "https://www.ratemyprofessors.com" \
+#           "/search/teachers?query=%s&sid=%s" % (name, base64.b64encode(("School-%s" % id)
+#                                                                                  .encode('ascii')).decode('ascii'))
+#     page = requests.get(url)
+#     tid = re.findall(r'"legacyId":(\d+)', page.text)
+#     return tid
+    
+
+
+
+def get_prof_info(id : str, professor_name: str):
+    url = "https://www.ratemyprofessors.com" \
+          "/search/teachers?query=%s&sid=%s" % (professor_name, base64.b64encode(("School-%s" % id)
+                                                                                 .encode('ascii')).decode('ascii'))
+    page = requests.get(url)
+    tid = re.findall(r'"legacyId":(\d+)', page.text)
+    if len(tid) == 0:
+        return {}
+    result = {}
+    for i in range(len(tid)):
+        url2 = f"https://www.ratemyprofessors.com/professor?tid={tid[i]}"
+        teacher_page = requests.get(url2)
+        soup = BeautifulSoup(teacher_page.content, 'html.parser', from_encoding="utf-8")
+        overall = soup.find_all("div", {"class": "RatingValue__Numerator-qw8sqy-2 liyUjw"})[0].text 
+        would_take = soup.find_all("div", {"class": "FeedbackItem__FeedbackNumber-uof32n-1 kkESWs"})[0].text 
+        difficulty =  soup.find_all("div", {"class": "FeedbackItem__FeedbackNumber-uof32n-1 kkESWs"})[1].text
+        num_ratings =  soup.find_all('a', href="#ratingsList")[0].text.split()[0]
+        name = soup.find_all("div", {"class": "NameTitle__Name-dowf0z-0 cfjPUG"})[0].text
+        dept =  soup.find_all("div", {"class": "NameTitle__Title-dowf0z-1 iLYGwn"})[0].text   
+        d1 = re.findall(r"(?<=Professor in the ).*$", dept)
+        d2 = re.findall(r".*?(?= department)", d1[0])[0]
+        d2 = d2.rstrip()
+        name = name.rstrip()
+    
+
+        result[tid[i]] = {"name": name,  "overall": overall, "would_take":would_take, "difficulty": difficulty, "num_ratings":num_ratings, "dept": d2}
+    return result
+   
+
+
+a = get_prof_info("1112", "Graham Evans")
+print(a)
