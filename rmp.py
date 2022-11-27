@@ -6,6 +6,7 @@ import base64
 import os
 from bs4 import BeautifulSoup
 
+import pandas as pd
 
 
 # uiuc id  = [1112]
@@ -46,12 +47,57 @@ def get_prof_info(id : str, professor_name: str):
         d2 = re.findall(r".*?(?= department)", d1[0])[0]
         d2 = d2.rstrip()
         name = name.rstrip()
+
+        raw_comment_list = soup.find_all("div",{"class": "Comments__StyledComments-dzzyvm-0 gRjWel"})
+        comments = []
+        for raw_comment in raw_comment_list:
+            comments.append(raw_comment.text)
     
 
-        result[tid[i]] = {"name": name,  "overall": overall, "would_take":would_take, "difficulty": difficulty, "num_ratings":num_ratings, "dept": d2}
+        result[tid[i]] = {"name": name,  "overall": overall, "would_take":would_take, "difficulty": difficulty, "num_ratings":num_ratings, "dept": d2, "comments": comments}
     return result
    
 
 
-a = get_prof_info("1112", "Graham Evans")
-print(a)
+#a = get_prof_info("1112", "Graham Evans")
+#print(a)
+
+#ADD RMP DATA TO COURSE GPA CSV
+""" course_df = pd.read_csv("all_courses_gpa.csv")
+course_df['Rate My Professor'] = 0
+rating_map = {}
+for index, row in course_df.iterrows():
+    prof_name = row['Primary Instructor']
+    if not pd.isna(prof_name):
+        name = prof_name[prof_name.find(', ')+2:] +" "+ prof_name[:prof_name.find(', ')]
+        without_initial_arr = re.split('[A-Z]\s[A-Z]',name) #want to remove middle initial
+        #print(without_initial_arr)
+        if len(without_initial_arr)>1:
+            name = without_initial_arr[0] + name[ (name.find(without_initial_arr[1])-1) : ]
+
+        
+        #print(name)
+        if (name not in rating_map.keys()):
+            try:
+                #print(get_prof_info(1112, name))
+                response = get_prof_info(1112, name)
+                if len(response) == 0:
+                    course_df.at[index, 'Rate My Professor'] = "Not Found"
+                    rating_map[name] = "Not Found"
+                    print("failed at "+name)
+                else:
+                    course_df.at[index, 'Rate My Professor'] = response
+                    rating_map[name] = response
+                    print("successful at "+name)
+                    
+            except:
+                course_df.at[index, 'Rate My Professor'] = "Not Found"
+                rating_map[name] = "Not Found"
+                print("failed at "+name)
+        else:
+            course_df.at[index, 'Rate My Professor'] = rating_map[name] 
+            print("already found "+name)
+
+print(course_df)
+course_df.to_csv("check_course_rmp.csv") """
+
