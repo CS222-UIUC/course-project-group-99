@@ -46,13 +46,16 @@ res = requests.get("https://oauth.reddit.com/r/UIUC/hot",
 # printing out the map
 # print(res.json()['data']['children'])
 
+print(res.json()['data']['url'])
+print('\n')
+
 num = 1
 for post in res.json()['data']['children']:
-        stuff = post['data']['title']
-        to_pr = f'{num}: {stuff} \n'
+        title = post['data']['title']
+        to_pr = f'{num} title: {title} \n'
         print(to_pr)
         body = post['data']['selftext']
-        to_pr2 = f'{num}: {body} \n'
+        to_pr2 = f'{num} body: {body} \n'
         print(to_pr2)
         num += 1
 
