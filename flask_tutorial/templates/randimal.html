@@ -1,32 +1,41 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>AutoComplete</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js">
-	</script>
-	
-	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js">
-	</script>
-	
-	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css"
-		rel="stylesheet" type="text/css" />
-</head>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" ></script>  
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+
 <body>
-	<h1>Welcome to GFG</h1>
-	<input type="text" id="tags">
-	
-	<script>
-$( function() {
-	var availableTags = [
-		{% for x in courses %}
-			"{{x}}",
-		{% endfor %}
-	];
-	$( "#tags" ).autocomplete({
-	source: availableTags
-	});
-} );
-</script>
-	
+    <h1>Courses</h1>
+<ul id="courses">
+
+</ul>
+
+    
+
 </body>
+
+<script>
+    var a = JSON.parse(("{{j}}").replaceAll("&#39;", "'").replaceAll("&#34;", '"'));
+    console.log(a);
+    var list = document.getElementById("courses");
+    
+    for (let i =0; i < a.length;i++) {
+        let list_element = document.createElement("li");
+        list_element.append(a[i]);
+        list.appendChild(list_element)
+    }
+</script>
+<script>
+    var list = document.getElementById("courses").getElementsByTagName("li");
+    for(let i = 0; i < list.length; i++) {
+        console.log(list[i].innerHTML);
+    }
+
+
+</script>
 </html>

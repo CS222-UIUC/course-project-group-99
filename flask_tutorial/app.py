@@ -1,9 +1,11 @@
 from flask import Flask
+import urllib.parse
 import pandas as pd
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
 )
 import json
+import rmp_
 #process data
 # i=0
 # df = pd.read_csv('all_courses_gpa.csv')
@@ -45,13 +47,46 @@ app = Flask(__name__)
     #     os.makedirs(app.instance_path)
     # except OSError:
     #     pass
+global json_list
+json_list = "kuch bhi nai"
 
 # a simple page that says hello
-@app.route('/', methods=["GET"])
-def home():
+@app.route('/', methods=["GET", "POST"])
+def sast():
     return render_template('index.html')
-   
 
+@app.route('/final', methods=['POST'])
+def final():
+    global json_list
+    json_list = request.get_json()
+    return jsonify({'processed': 'true'})
+    # return render_template('randimal.html', j=j)
+
+@app.route('/randimal', methods=["GET"])
+def randimal():
+    course_info={} 
+    for course in json_list: 
+
+        code_and_name = course.split("-")
+        course_code = code_and_name[0]
+        name = code_and_name[1]
+        first_and_last =  name.split(",")
+        last_name = first_and_last[0]
+        first_name = first_and_last[1].split(" ")[1]
+        full_name = f"{first_name} {last_name}"
+        rmp_data = {}
+        rmp_data = rmp_.get_prof_info("1112", full_name)
+        course_info[full_name + "-" + course_code] = rmp_data
+        
+    print(course_info)
+
+        
+    return render_template('randimal.html', j=json.dumps(json_list))
+
+# @app.route("/final", methods = ["GET"])
+# def final_get():
+#     json_list = request.get_json()
+#     return render_template('randimal.html', j = json_list)
 
 
 

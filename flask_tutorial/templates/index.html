@@ -42,7 +42,7 @@
       <div class="col">
         <h3>Select season</h3>
         <div class="form-group">
-          <form id="season" name="course_form">
+          <form id="season" action="/final" name="course_form">
           <input class="form-check-input" type="radio" name="radio_btn" id="radio1" value="Spring">
           <label class="form-check-label" for="radio1">Spring</label>
           <br>
@@ -225,12 +225,32 @@ $(document).ready(function() {
   $("#submit-btn").click(function(){
     var selected_classes = document.getElementById("myUL").getElementsByTagName("li");
     if(selected_classes.length == 0) {
-      alert("You have not selected any classes")
+      alert("You have not selected any classes");
     } else {
-      var confirmed = confirm("Are you sure?")
-      if(confirmed) {
-        console.log("confirmed randimal");
-      } 
+      // var confirmed = confirm("Are you sure?");
+      // if(confirmed) {
+        
+      // } 
+      var elements = document.getElementById("myUL").getElementsByTagName('li');
+        var li_elements = []
+        
+        for (let i = 0; i <= elements.length - 1; i++) {
+            li_elements[i] = elements[i].childNodes[0].nodeValue;
+        }
+        var jsonified_list = JSON.stringify(li_elements);
+        
+        $.ajax({
+          type: "POST",
+          dataType: 'json',
+          data: jsonified_list,
+          url: "{{ url_for('final')}}",
+          headers: {"Content-Type" : "application/json"},
+          success: function(msg){
+            console.log("sent data");
+          }
+        });
+        location.href = "{{ url_for('randimal') }}";
+     
     }
   });
 
