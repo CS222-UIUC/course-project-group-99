@@ -1,15 +1,13 @@
 from flask import Flask
-import urllib.parse
-import pandas as pd
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
 )
 import json
-import rmp_
+import rmp
 #process data
 # i=0
 # df = pd.read_csv('all_courses_gpa.csv')
-# df_final = df[['Index','Subject', 'Number','Primary Instructor','YearTerm','Sched Type']]
+# df_final = df[['Index','Subject', 'Number','Primary Instructor','YearTerm','Sched Type', 'Average GPA']]
 # df_final = df_final.astype(str)
 # course_list = df_final.values.tolist()
 # # empty_s = set()
@@ -18,13 +16,13 @@ import rmp_
 # for x in course_list:
 #         if (x[0] not in set):
 #             if((x[5]=="DIS"  or x[5]=="LCD" or x[5]=="ONL" or x[5]=="OLC")):
-#                 courses[i] = {"year_term":x[4], "instructor": x[3], "subject":x[1], "number":x[2]}
+#                 courses[i] = {"year_term":x[4], "instructor": x[3], "subject":x[1], "number":x[2], "GPA":x[6]}
 #                 set.add(x[0])
-#                 i+=1
+#                 i+=1--
 
 # json_courses = json.dumps(courses)
 # with open("courses.json", "w") as outfile:
-    #outfile.write(json_object)
+#     outfile.write(json_courses)
 
 app = Flask(__name__)
 # def create_app(test_config=None):
@@ -68,20 +66,22 @@ def randimal():
     for course in json_list: 
 
         code_and_name = course.split("-")
-        course_code = code_and_name[0]
+        course_code_and_number = code_and_name[0]
+        course_code = course_code_and_number.split()[0]
         name = code_and_name[1]
         first_and_last =  name.split(",")
         last_name = first_and_last[0]
         first_name = first_and_last[1].split(" ")[1]
         full_name = f"{first_name} {last_name}"
         rmp_data = {}
-        rmp_data = rmp_.get_prof_info("1112", full_name)
-        course_info[full_name + "-" + course_code] = rmp_data
-        
-    print(course_info)
+        rmp_data = rmp.get_prof_info("1112", full_name, course_code)
+        course_info[course] = rmp_data   
+
+    # print(course_info)
+    # print(json.dumps(course_info))
 
         
-    return render_template('randimal.html', j=json.dumps(json_list))
+    return render_template('randimal.html', j=json.dumps(json_list), courses = json.dumps(course_info))
 
 # @app.route("/final", methods = ["GET"])
 # def final_get():
