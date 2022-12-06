@@ -9,17 +9,19 @@
 ## c. Provides Reproducible Installation Instruction
 ### We require you to have the following libraries installed: 
 	json, rmp, flask, transformers, requests, re, base64, bs4
-###  Our flask app is labelled "app.py" so you must cd to the folder "flask_tutorial" to run the app.Note that to run flask you may need to use one of the following commands:
-	flask --app app run
+### Note that to run flask you may need to use one of the following commands (this depends on where you install flask):
+	flask --app app --debug run
   	
-	python -m flask --app app run
+	python -m flask --app app --debug run
  	
-	python3 -m flask --app app run
+	python3 -m flask --app app --debug run
+
 	By default the flask server will run on http://127.0.0.1:5000/ and this will be hyperlinked in the terminal 
 
 
 ## d. Group members and Their roles
 ### Daniyal:
+	Built course GPA dataset and created the sentiment analysis scripts
 ### Aditya:
    Built the front-end and the RateMyProf functions
 ### Deepit:
