@@ -2,7 +2,7 @@
 
 ## a. Summary of Presentation Introduction
 
-	We wanted to create a comprehensive rating platform tailored toward the courses and professors at UIUC. We consolidated ratings from "Rate My Professors" and Reddit, as well as course GPAs, in order to provide students with a broad overview of their course workload and difficulty. This involved the generation of course-specific metrics that incorporated NLP sentiment analysis and class section GPA to provide students with a recommendation about their inputted course.
+We wanted to create a comprehensive rating platform tailored toward the courses and professors at UIUC. We consolidated ratings from "Rate My Professors" and Reddit, as well as course GPAs, in order to provide students with a broad overview of their course workload and difficulty. This involved the generation of course-specific metrics that incorporated NLP sentiment analysis and class section GPA to provide students with a recommendation about their inputted course.
 
 ## b. Describes Technical Architecture
 
