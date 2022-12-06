@@ -8,18 +8,18 @@ We wanted to create a comprehensive rating platform tailored toward the courses 
 
 ## c. Provides Reproducible Installation Instruction
 # We require you to have the following libraries installed: 
-### json, rmp, flask, transformers, requests, re, base64, bs4
+ json, rmp, flask, transformers, requests, re, base64, bs4
 ### Note that to run flask you may need to use one of the following commands (this depends on where you install flask):
-### 	flask --app app --debug run
-### python -m flask --app app --debug run
-### 	python3 -m flask --app app --debug run
+	flask --app app --debug run
+  python -m flask --app app --debug run
+ 	python3 -m flask --app app --debug run
 ## By default the flask server will run on http://127.0.0.1:5000/ and this will be hyperlinked in the terminal 
 
 
 ## d. Group members and Their roles
 # Daniyal:
 # Aditya:
-  ## Built the front-end and the RateMyProf functions
+   Built the front-end and the RateMyProf functions
 # Deepit:
 # Rohan
 
