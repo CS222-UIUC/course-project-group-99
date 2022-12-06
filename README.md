@@ -25,5 +25,6 @@ Built course GPA dataset and created the sentiment analysis scripts
 ### Aditya:
    Built the front-end and the RateMyProf functions
 ### Deepit:
+   Worked on getting the user input, building proposals, and identified which APIs are needed for NLP
 ### Rohan
 
