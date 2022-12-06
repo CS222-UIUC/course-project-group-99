@@ -21,7 +21,7 @@
 
 ## d. Group members and Their roles
 ### Daniyal:
-	Built course GPA dataset and created the sentiment analysis scripts
+Built course GPA dataset and created the sentiment analysis scripts
 ### Aditya:
    Built the front-end and the RateMyProf functions
 ### Deepit:
