@@ -17,3 +17,9 @@ We require you to have the following libraries installed:
 
 
 ## d. Group members and Their roles
+#Daniyal:
+#Aditya:
+  ##Built the front-end and the RateMyProf functions
+#Deepit:
+#Rohan
+
