@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" ></script>  
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<body>
+
+    <div class="container text-center">
+        <div class="row">
+          <div class="col"><h1></h1></div>
+        </div>
+        <div class="row">
+          <div class="col-8" id = "t_score"></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col"><p class="lead">
+            We use a variety of tools in our review. From sentiment analysis to average grade disparity, our algorithm is very robust. Read below to get a breakup of your score.</p></div>
+            <div class="col"></div>
+        </div>
+
+      
+
+
+
+    <h1>  Courses</h1>
+<ul id="courses"   style = "list-style:none;text-indent:0px">
+</ul>
+
+
+
+<h1>Our Recommendation</h1>
+<p class="lead" id="recommendation"> </p>
+ 
+</body>
+
+<script>
+    var courses = JSON.parse(("{{j}}").replaceAll("&#39;", "'").replaceAll("&#34;", '"'));
+    var list = document.getElementById("courses");
+    for (let i =0; i < courses.length;i++) {
+        let list_element = document.createElement("li");
+        list_element.append(courses[i]);
+        list.appendChild(list_element)
+    }
+</script>
+
+<script>
+    var sum = 0.0;
+    var counter = 0.0;
+    var cleaned_json = "{{courses}}".replaceAll("&#34;", '"');
+    var list = JSON.parse(cleaned_json);    
+    var courses = document.getElementById("courses").getElementsByTagName("li");
+console.log(list);
+            
+    for(let i = 0; i < courses.length; i++) {
+        let list_element = courses[i];
+        let prof = courses[i].innerHTML;
+        console.log(prof);
+        let sub_list = document.createElement("ul");
+        let sublist_element = document.createElement("li");
+        let name = prof.split("-")[1];
+        let number = prof.split("-")[0].split(" ")[1];
+        var avg_gpa;
+        function getGPA(value) {
+                return (value.instructor === name && value.number === number);
+            }
+        console.log(JSON.stringify(list[prof]));
+        if(JSON.stringify(list[prof]) === "{}") {
+            fetch("static/courses.json")
+                .then((response) => response.json())
+                .then(data => {
+                let arr = Object.values(data);
+                let values = arr.filter(getGPA);
+               
+                console.log(values);
+                avg_gpa = values[0].GPA;
+                avg_gpa = avg_gpa.slice(0,4);
+                sublist_element.append("We could not find much information on this professor. The average GPA for this class is " + avg_gpa + ".");
+                sub_list.appendChild(sublist_element);
+                list_element.appendChild(sub_list);
+                });
+        } else {
+            sum += parseFloat(list[prof]["overall"]);
+            counter++;
+
+
+            let would_take = JSON.stringify(list[prof]["would_take"]).replace(/\"/g, "");
+            let difficulty = JSON.stringify(list[prof]["difficulty"]).replace(/\"/g, "");
+            let num_ratings = JSON.stringify(list[prof]["num_ratings"]).replace(/\"/g, "");
+            let comments = JSON.stringify(list[prof]["comments"]).replace(/\"/g, "");
+            var text = "Out of " + num_ratings + " people, " + would_take + " would take this professor's class again. Our sentiment analysis revealed that " + comments + " of comments were positive. The average GPA for this class is ";
+            fetch("static/courses.json")
+                .then((response) => response.json())
+                .then(data => {
+                let arr = Object.values(data);
+                let values = arr.filter(getGPA);
+                avg_gpa = values[0].GPA;
+                avg_gpa = avg_gpa.slice(0,4);
+                text += avg_gpa + ".";
+                sublist_element.append(text);
+                sub_list.appendChild(sublist_element);
+                list_element.appendChild(sub_list);
+                });
+        }
+    }
+    var avg = sum/counter;
+    var header = document.createElement("h1");
+    header.innerHTML = "Total Score: " + avg + " / 5";
+    var div_tag = document.getElementById("t_score");
+    div_tag.appendChild(header);
+    var recommendation_paragraph = document.getElementById("recommendation");
+    var text;
+    if (avg < 2) {
+        text = "We think you should either take easier classes that are taught by highly-rated professors, or drop the ones you currently have.";
+    } else {
+        text= "This is a great selection of classes. Feel free to take or drop classes based on your preference!";
+    }
+  
+  recommendation_paragraph.append(text);
+</script>
+</html>
